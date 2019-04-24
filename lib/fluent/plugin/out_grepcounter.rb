@@ -269,13 +269,16 @@ DESC
 
   def generate_output(count, matches, tag = nil)
     return nil if count.nil?
-    return nil if count == 0 # ignore 0 because standby nodes receive no message usually
-    return nil if @less_than     and @less_than   <= count
-    return nil if @less_equal    and @less_equal  <  count
-    return nil if @greater_than  and count <= @greater_than
-    return nil if @greater_equal and count <  @greater_equal
+    if count != 0
+      # return nil if count == 0 # ignore 0 because standby nodes receive no message usually
+      return nil if @less_than     and @less_than   <= count
+      return nil if @less_equal    and @less_equal  <  count
+      return nil if @greater_than  and count <= @greater_than
+      return nil if @greater_equal and count <  @greater_equal
+    end
     output = {}
     output['count'] = count
+    output['message'] = ''
     if @input_key
       output['message'] = @delimiter ? matches.join(@delimiter) : matches
     else
